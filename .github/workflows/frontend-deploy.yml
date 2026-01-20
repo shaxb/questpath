@@ -43,6 +43,6 @@ jobs:
           script: |
             cd /home/${{ secrets.AWS_USERNAME }}/questpath
             docker pull shaxboz777/questpath-frontend:latest
-            docker-compose up -d frontend
-            docker-compose restart nginx
+            docker compose up -d frontend
+            docker compose restart nginx
             docker system prune -f
