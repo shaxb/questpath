@@ -35,7 +35,7 @@ services:
 
   # Only 1 backend instance (save memory)
   app:
-    image: shaxboz777/questpath:latest
+    image: shaxboz777/questpath-backend:latest
     container_name: questpath-app
     env_file: .env
     environment:
