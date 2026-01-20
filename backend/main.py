@@ -28,6 +28,7 @@ else:
     logger.info("sentry_disabled", 
                 message="SENTRY_DSN not configured - errors will only be logged locally")
 
+logger.info("starting_app: THIS RUN IF CI/CD DEPLOY")
 
 app = FastAPI(title="QuestPath API", version="1.0.0")
 
