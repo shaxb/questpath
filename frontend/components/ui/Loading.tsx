@@ -18,12 +18,12 @@ export default function Loading({
   const content = (
     <div className="flex flex-col items-center justify-center gap-4">
       <div 
-        className={`animate-spin rounded-full border-purple-200 border-t-purple-600 ${sizeClasses[size]}`}
+        className={`animate-spin rounded-full border-purple-200 dark:border-purple-800 border-t-purple-600 dark:border-t-purple-400 ${sizeClasses[size]}`}
         role="status"
         aria-label="Loading"
       />
       {message && (
-        <p className="text-gray-600 text-center animate-pulse">
+        <p className="text-gray-600 dark:text-gray-300 text-center animate-pulse">
           {message}
         </p>
       )}
@@ -32,7 +32,7 @@ export default function Loading({
 
   if (fullPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         {content}
       </div>
     );

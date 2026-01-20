@@ -21,9 +21,9 @@ function PricingContent() {
     if (premiumStatus === 'success') {
       // Refresh user data to get updated premium status
       refreshUser();
-      toast.success('Welcome to Premium! 🎉');
+      // Don't show toast here - let dashboard handle it
     }
-  }, [searchParams, refreshUser]);
+  }, []);  // Run only once on mount
 
   const handleUpgrade = async () => {
     setCheckoutLoading(true);

@@ -43,18 +43,20 @@ function DashboardContent() {
 
   useEffect(() => {
     fetchGoals();
-    
+  }, []);
+
+  useEffect(() => {
     // Check if user just completed premium purchase
     const premiumStatus = searchParams.get('premium');
     if (premiumStatus === 'success') {
       // Refresh user data to get updated premium status
       refreshUser().then(() => {
         toast.success('🎉 Welcome to Premium! You now have unlimited goals!');
-        // Remove the query param from URL
-        router.replace('/dashboard');
       });
+      // Remove the query param from URL immediately to prevent re-triggers
+      router.replace('/dashboard', { scroll: false });
     }
-  }, [searchParams, refreshUser, router]);
+  }, []);  // Run only once on mount
 
   const getStatusColor = (status: string) => {
     switch (status) {
