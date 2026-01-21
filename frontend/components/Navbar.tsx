@@ -55,6 +55,16 @@ export default function Navbar() {
                 Pricing
               </Link>
               <Link 
+                href="/about" 
+                className={`px-3 py-2 rounded-md transition-all ${
+                  isActive('/about')
+                    ? 'text-purple-700 font-semibold bg-purple-50 dark:text-purple-300 dark:bg-purple-900/30'
+                    : 'text-gray-600 hover:text-purple-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-purple-400 dark:hover:bg-gray-800'
+                }`}
+              >
+                About
+              </Link>
+              <Link 
                 href="/profile" 
                 className={`px-3 py-2 rounded-md transition-all ${
                   isActive('/profile')
@@ -92,8 +102,9 @@ export default function Navbar() {
                   <nav className="flex flex-col">
                     <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Dashboard</Link>
                     <Link href="/leaderboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Leaderboard</Link>
+                    <Link href="/pricing" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Pricing</Link>
+                    <Link href="/about" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">About</Link>
                     <Link href="/profile" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Profile</Link>
-                      <Link href="/pricing" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Pricing</Link>
 
                     {/* <div className="mt-2 px-2">
                       <ThemeToggle />
