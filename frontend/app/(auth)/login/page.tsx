@@ -105,7 +105,7 @@ function LoginForm() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Animation Area (70%) */}
-      <div className="hidden lg:flex lg:w-[70%] bg-gradient-to-br from-green-400 via-blue-500 to-purple-500 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-[70%] bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500 dark:from-purple-700 dark:via-blue-700 dark:to-cyan-600 relative overflow-hidden">
         {/* Floating Icons */}
         <div className="absolute inset-0">
           {/* Book Icon 1 */}
@@ -169,7 +169,7 @@ function LoginForm() {
         <div className="w-full max-w-md">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-green-500 dark:text-green-400 mb-2">QuestPath</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">QuestPath</h1>
             <p className="text-gray-600 dark:text-gray-300 text-sm">Sign in to your account</p>
           </div>
 
@@ -229,7 +229,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? 'SIGNING IN...' : 'SIGN IN'}
             </button>

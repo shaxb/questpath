@@ -106,7 +106,7 @@ export default function NewGoalPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       <Navbar />
 
       {/* Premium Limit Modal */}
@@ -123,8 +123,8 @@ export default function NewGoalPage() {
         
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-lg mb-4 animate-bounce-subtle">
-            <Target className="text-blue-600 dark:text-blue-300" size={32} />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-2xl mb-4 shadow-lg">
+            <Target className="text-purple-600 dark:text-purple-400" size={32} />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2 animate-slide-up">Create New Goal</h1>
           <p className="text-gray-600 dark:text-gray-300 text-lg animate-slide-up animation-delay-100">Tell us what you want to learn, and we'll create your personalized roadmap</p>
@@ -146,7 +146,7 @@ export default function NewGoalPage() {
                 onChange={(e) => setDescription(String(e.target.value))}
                 placeholder="e.g., Learn web development"
                 disabled={loading}
-                className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 dark:bg-slate-800 border border-gray-300 dark:border-gray-700 rounded-md focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-200 disabled:bg-gray-100 dark:disabled:bg-slate-700 disabled:cursor-not-allowed focus:scale-[1.01] transform placeholder-gray-400 dark:placeholder-gray-500"
+                className="w-full px-4 py-3 text-gray-900 dark:text-gray-100 dark:bg-slate-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:border-purple-500 dark:focus:border-purple-400 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/30 outline-none transition-all duration-200 disabled:bg-gray-100 dark:disabled:bg-slate-700 disabled:cursor-not-allowed focus:scale-[1.01] transform placeholder-gray-400 dark:placeholder-gray-500"
               />
               
               {error && (
@@ -163,7 +163,7 @@ export default function NewGoalPage() {
             <button
               type="submit"
               disabled={loading || !description.trim()}
-              className="w-full bg-blue-600 dark:bg-blue-600 text-white font-medium py-3 px-6 rounded-md hover:bg-blue-700 dark:hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transform hover:shadow-lg"
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:from-gray-300 disabled:to-gray-400 dark:disabled:from-gray-600 dark:disabled:to-gray-700 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transform shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40"
             >
               {loading ? (
                 <>
@@ -193,7 +193,7 @@ export default function NewGoalPage() {
                 onClick={() => selectExample(example)}
                 disabled={loading}
                 style={{ animationDelay: `${index * 50}ms` }}
-                className="px-4 py-3 bg-white dark:bg-slate-800 border border-gray-300 dark:border-gray-700 rounded-md hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 text-left hover:scale-105 transform animate-slide-up hover:shadow-md"
+                className="px-4 py-3 bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 text-left hover:scale-105 transform animate-slide-up hover:shadow-md"
               >
                 {example}
               </button>

@@ -103,7 +103,7 @@ function DashboardContent() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       <Navbar />
 
       {/* Main Content */}
@@ -181,7 +181,7 @@ function DashboardContent() {
             </div>
             <Link
               href="/goals/new"
-              className="flex items-center gap-2 bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
             >
               <Plus size={18} />
               Create Goal
@@ -196,7 +196,7 @@ function DashboardContent() {
                 <p className="text-gray-600 dark:text-gray-300 mb-6">Create your first learning goal to get started!</p>
                 <Link
                   href="/goals/new"
-                  className="inline-flex items-center gap-2 bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
                 >
                   <Plus size={18} />
                   Create Your First Goal

@@ -163,22 +163,22 @@ export default function GoalDetailPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-b from-purple-50 via-blue-50 to-cyan-50 dark:from-gray-950 dark:via-purple-950/20 dark:to-blue-950/20">
       <Navbar />
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 py-8">
         
         {/* Back Button */}
-        <Link href="/dashboard" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6">
+        <Link href="/dashboard" className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 mb-6 transition-colors font-medium">
           <ArrowLeft size={20} />
           Back to Dashboard
         </Link>
 
         {/* Goal Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">{goal.title}</h1>
-          <p className="text-gray-600 text-lg mb-4">{goal.roadmap.name}</p>
+          <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-900 via-blue-900 to-cyan-900 dark:from-purple-200 dark:via-blue-200 dark:to-cyan-200 bg-clip-text text-transparent mb-3">{goal.title}</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg mb-4">{goal.roadmap.name}</p>
           <div className="flex gap-3 justify-center">
             <span className={`px-4 py-2 rounded-full text-sm font-bold ${getDifficultyColor(goal.difficulty_level)}`}>
               {goal.difficulty_level}
@@ -247,34 +247,35 @@ export default function GoalDetailPage() {
 
       {/* Level Detail Modal */}
       {selectedLevel && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in" onClick={() => setSelectedLevel(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden animate-slide-up" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in" onClick={() => setSelectedLevel(null)}>
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-slide-up border border-gray-200 dark:border-gray-700" onClick={(e) => e.stopPropagation()}>
             
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-6 text-white relative">
+            <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 dark:from-purple-700 dark:via-blue-700 dark:to-cyan-700 p-6 sm:p-8 text-white relative">
               <button
                 onClick={() => setSelectedLevel(null)}
-                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
+                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-all hover:scale-110 active:scale-95"
+                aria-label="Close modal"
               >
                 <X size={24} />
               </button>
               
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
-                  <span className="text-4xl font-black">{selectedLevel.order}</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4 pr-10">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <span className="text-3xl sm:text-4xl font-black">{selectedLevel.order}</span>
                 </div>
-                <div>
-                  <h2 className="text-2xl font-bold">{selectedLevel.title}</h2>
-                  <p className="text-purple-100">{selectedLevel.description}</p>
+                <div className="flex-1">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-1">{selectedLevel.title}</h2>
+                  <p className="text-purple-100 dark:text-blue-100 text-sm sm:text-base">{selectedLevel.description}</p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <Trophy size={20} />
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm">
+                <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                  <Trophy size={18} />
                   <span className="font-bold">{selectedLevel.xp_reward} XP</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
                   <span className="font-bold">
                     {getLevelProgress(selectedLevel).completed}/{getLevelProgress(selectedLevel).total} Topics
                   </span>
@@ -283,28 +284,35 @@ export default function GoalDetailPage() {
             </div>
 
             {/* Modal Content */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
+            <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
               
               {/* Topics Section */}
               <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">📚 Topics to Master</h3>
-                <div className="space-y-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+                  <span>📚</span>
+                  <span>Topics to Master</span>
+                </h3>
+                <div className="space-y-2.5">
                   {selectedLevel.topics.map((topic, topicIndex) => (
                     <button
                       key={topicIndex}
                       onClick={() => handleTopicToggle(selectedLevel.id, topicIndex)}
-                      className={`w-full flex items-center gap-3 p-4 rounded-xl transition-all duration-200 ${
+                      className={`w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl transition-all duration-200 text-left group ${
                         topic.completed
-                          ? 'bg-green-50 hover:bg-green-100 border-2 border-green-200'
-                          : 'bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 hover:border-purple-300'
+                          ? 'bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-2 border-green-300 dark:border-green-700'
+                          : 'bg-gray-50 hover:bg-purple-50 dark:bg-gray-800 dark:hover:bg-purple-900/20 border-2 border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-600'
                       }`}
                     >
                       {topic.completed ? (
-                        <CheckCircle2 className="text-green-600 flex-shrink-0" size={24} />
+                        <CheckCircle2 className="text-green-600 dark:text-green-400 flex-shrink-0 transition-transform group-hover:scale-110" size={22} />
                       ) : (
-                        <Circle className="text-gray-400 flex-shrink-0" size={24} />
+                        <Circle className="text-gray-400 dark:text-gray-500 flex-shrink-0 transition-transform group-hover:scale-110" size={22} />
                       )}
-                      <span className={`text-left font-medium ${topic.completed ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
+                      <span className={`font-medium text-sm sm:text-base ${
+                        topic.completed 
+                          ? 'text-gray-500 dark:text-gray-400 line-through' 
+                          : 'text-gray-900 dark:text-gray-100 group-hover:text-purple-700 dark:group-hover:text-purple-300'
+                      }`}>
                         {topic.name}
                       </span>
                     </button>
@@ -315,10 +323,10 @@ export default function GoalDetailPage() {
               {/* Quiz Button */}
               <button
                 onClick={() => selectedLevel && startQuiz(selectedLevel)}
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 hover:from-purple-700 hover:via-blue-700 hover:to-cyan-700 text-white font-bold py-3.5 sm:py-4 px-6 rounded-xl transition-all shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transform"
               >
                 <Brain size={24} />
-                Take Quiz & Earn {selectedLevel.xp_reward} XP
+                <span className="text-sm sm:text-base">Take Quiz & Earn {selectedLevel.xp_reward} XP</span>
               </button>
             </div>
           </div>
