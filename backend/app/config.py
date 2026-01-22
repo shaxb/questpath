@@ -25,9 +25,9 @@ class Settings(BaseSettings):
     environment: str = "development"
     
     # Logging control
-    debug: bool = True  # Set to False in production
+    debug: bool = True  # Set to False in production to reduce logs
     log_sql_queries: bool = False  # SQLAlchemy query logging
-    log_http_requests: bool = False  # Uvicorn access logs
+    log_http_requests: bool = True  # Uvicorn access logs
     
     # Error Tracking
     sentry_dsn: str | None = None  # Add to .env for production error tracking
