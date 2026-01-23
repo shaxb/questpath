@@ -23,7 +23,7 @@ export default function HomePage() {
               </Link>
               <Link 
                 href="/register"
-                className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
+                className="px-3 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
               >
                 Get Started
               </Link>
@@ -52,17 +52,17 @@ export default function HomePage() {
               and compete on leaderboards while mastering new skills.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
               <Link 
                 href="/register"
-                className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all shadow-xl shadow-purple-500/30 hover:shadow-2xl hover:shadow-purple-500/40 font-semibold text-lg flex items-center gap-2 w-full sm:w-auto justify-center"
+                className="group px-5 py-2.5 sm:px-8 sm:py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg sm:rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all shadow-xl shadow-purple-500/30 hover:shadow-2xl hover:shadow-purple-500/40 font-semibold text-base sm:text-lg flex items-center gap-2 w-full sm:w-auto justify-center"
               >
                 Start Your Quest
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link 
                 href="/leaderboard"
-                className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all font-semibold text-lg w-full sm:w-auto justify-center flex items-center"
+                className="px-5 py-2.5 sm:px-8 sm:py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg sm:rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-500 dark:hover:border-purple-500 transition-all font-semibold text-base sm:text-lg w-full sm:w-auto justify-center flex items-center"
               >
                 View Leaderboard
               </Link>

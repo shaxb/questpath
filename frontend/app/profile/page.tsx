@@ -96,10 +96,10 @@ export default function ProfilePage() {
         
         <main className="max-w-4xl mx-auto px-4 py-8">
           {/* Profile Header */}
-          <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-700 dark:to-purple-800 rounded-3xl p-8 mb-8 text-white shadow-lg">
-            <div className="flex items-center gap-6">
+          <div className="bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-700 dark:to-purple-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 mb-6 sm:mb-8 text-white shadow-lg">
+            <div className="flex items-center gap-3 sm:gap-6">
               {/* Avatar */}
-              <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border-4 border-white/30 dark:border-white/10">
+              <div className="w-16 h-16 sm:w-24 sm:h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border-4 border-white/30 dark:border-white/10">
                 {stats?.profile_picture ? (
                   <img 
                     src={stats.profile_picture} 
@@ -107,7 +107,7 @@ export default function ProfilePage() {
                     className="w-full h-full rounded-full object-cover"
                   />
                 ) : (
-                  <UserIcon size={48} className="text-white" />
+                  <UserIcon size={32} className="sm:w-12 sm:h-12 text-white" />
                 )}
               </div>
 
@@ -139,14 +139,15 @@ export default function ProfilePage() {
                     </button>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-3xl font-black text-white dark:text-white">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <h1 className="text-xl sm:text-3xl font-black text-white dark:text-white truncate max-w-[150px] sm:max-w-none">
                       {stats?.display_name || 'Unnamed Hero'}
                     </h1>
                     {user?.is_premium && (
-                      <span className="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-lg">
-                        <Crown size={16} fill="currentColor" />
-                        PREMIUM
+                      <span className="inline-flex items-center gap-0.5 sm:gap-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full shadow-lg">
+                        <Crown size={12} className="sm:w-4 sm:h-4" fill="currentColor" />
+                        <span className="hidden sm:inline">PREMIUM</span>
+                        <span className="sm:hidden">PRO</span>
                       </span>
                     )}
                     <button
@@ -157,12 +158,12 @@ export default function ProfilePage() {
                     </button>
                   </div>
                 )}
-                <p className="text-white/80 text-lg">{stats?.email}</p>
-                <div className="flex items-center gap-2 mt-3">
-                  <div className="px-4 py-1 bg-white/20 rounded-full backdrop-blur-sm font-bold">
-                    Level {level}
+                <p className="text-white/80 text-sm sm:text-lg truncate">{stats?.email}</p>
+                <div className="flex items-center gap-2 mt-2 sm:mt-3">
+                  <div className="px-2 sm:px-4 py-0.5 sm:py-1 text-xs sm:text-base bg-white/20 rounded-full backdrop-blur-sm font-bold">
+                    Lv {level}
                   </div>
-                  <div className="px-4 py-1 bg-white/20 rounded-full backdrop-blur-sm font-bold">
+                  <div className="px-2 sm:px-4 py-0.5 sm:py-1 text-xs sm:text-base bg-white/20 rounded-full backdrop-blur-sm font-bold">
                     {stats?.total_exp} XP
                   </div>
                 </div>
@@ -171,48 +172,48 @@ export default function ProfilePage() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {/* Total XP */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-yellow-100 rounded-xl">
-                  <Award className="text-yellow-600" size={24} />
+            <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="p-2 sm:p-3 bg-yellow-100 rounded-lg sm:rounded-xl">
+                  <Award className="text-yellow-600" size={20} />
                 </div>
-                <h3 className="font-bold text-gray-500 text-sm uppercase tracking-wider">Total XP</h3>
+                <h3 className="font-bold text-gray-500 text-xs sm:text-sm uppercase tracking-wider">Total XP</h3>
               </div>
-              <p className="text-4xl font-black text-gray-900 dark:text-gray-100">{stats?.total_exp}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">Experience Points</p>
+              <p className="text-2xl sm:text-4xl font-black text-gray-900 dark:text-gray-100">{stats?.total_exp}</p>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1">Experience Points</p>
             </div>
 
             {/* Levels Completed */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-green-100 rounded-xl">
-                  <Trophy className="text-green-600" size={24} />
+            <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="p-2 sm:p-3 bg-green-100 rounded-lg sm:rounded-xl">
+                  <Trophy className="text-green-600" size={20} />
                 </div>
-                <h3 className="font-bold text-gray-500 text-sm uppercase tracking-wider">Levels Done</h3>
+                <h3 className="font-bold text-gray-500 text-xs sm:text-sm uppercase tracking-wider">Levels Done</h3>
               </div>
-              <p className="text-4xl font-black text-gray-900 dark:text-gray-100">{stats?.levels_completed}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">Challenges Completed</p>
+              <p className="text-2xl sm:text-4xl font-black text-gray-900 dark:text-gray-100">{stats?.levels_completed}</p>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1">Challenges Completed</p>
             </div>
 
             {/* Completion Rate */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-blue-100 rounded-xl">
-                  <Target className="text-blue-600" size={24} />
+            <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="p-2 sm:p-3 bg-blue-100 rounded-lg sm:rounded-xl">
+                  <Target className="text-blue-600" size={20} />
                 </div>
-                <h3 className="font-bold text-gray-500 text-sm uppercase tracking-wider">Progress</h3>
+                <h3 className="font-bold text-gray-500 text-xs sm:text-sm uppercase tracking-wider">Progress</h3>
               </div>
-              <p className="text-4xl font-black text-gray-900 dark:text-gray-100">{stats?.goal_completion_percentage}%</p>
-              <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">Overall Completion</p>
+              <p className="text-2xl sm:text-4xl font-black text-gray-900 dark:text-gray-100">{stats?.goal_completion_percentage}%</p>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1">Overall Completion</p>
             </div>
           </div>
 
           {/* Progress Bar */}
           {stats && stats.goal_completion_percentage > 0 && (
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-              <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Your Journey</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4">Your Journey</h3>
               <div className="relative">
                 <div className="w-full h-6 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div

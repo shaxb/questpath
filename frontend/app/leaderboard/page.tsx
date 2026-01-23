@@ -102,19 +102,19 @@ export default function LeaderboardPage() {
           {data && (
             <div className="space-y-6">
               {/* Your Rank Card */}
-              <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border-2 border-blue-100 dark:border-blue-800 flex items-center justify-between mb-8 transform transition-all hover:shadow-md">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold text-xl">
+              <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-blue-100 dark:border-blue-800 flex items-center justify-between mb-6 sm:mb-8 transform transition-all hover:shadow-md">
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold text-base sm:text-xl">
                     #{data.current_user.rank}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Your Rank</h2>
-                    <p className="text-gray-500 dark:text-gray-300">{data.current_user.email}</p>
+                    <h2 className="text-base sm:text-xl font-bold text-gray-900 dark:text-gray-100">Your Rank</h2>
+                    <p className="text-xs sm:text-base text-gray-500 dark:text-gray-300 truncate max-w-[120px] sm:max-w-none">{data.current_user.email}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-black text-blue-600 dark:text-blue-300">{data.current_user.total_exp}</p>
-                  <p className="text-sm font-bold text-blue-400 dark:text-blue-300 uppercase tracking-wider">Total XP</p>
+                  <p className="text-xl sm:text-3xl font-black text-blue-600 dark:text-blue-300">{data.current_user.total_exp}</p>
+                  <p className="text-xs sm:text-sm font-bold text-blue-400 dark:text-blue-300 uppercase tracking-wider">XP</p>
                 </div>
               </div>
 
@@ -124,9 +124,9 @@ export default function LeaderboardPage() {
                   <table className="w-full">
                     <thead>
                       <tr className="bg-gray-50 dark:bg-slate-800 border-b border-gray-100 dark:border-gray-700">
-                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-24">Rank</th>
-                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
-                        <th className="px-6 py-4 text-right text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total XP</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-16 sm:w-24">Rank</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
+                        <th className="px-3 sm:px-6 py-2 sm:py-4 text-right text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">XP</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -137,40 +137,40 @@ export default function LeaderboardPage() {
                             key={entry.user_id} 
                             className={`transition-colors ${getRowStyle(entry.rank, isCurrentUser)}`}
                           >
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center justify-center w-8">
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
+                              <div className="flex items-center justify-center w-6 sm:w-8">
                                 {getRankIcon(entry.rank)}
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-full ${isCurrentUser ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'}`}>
-                                  <UserIcon size={20} />
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
+                              <div className="flex items-center gap-2 sm:gap-3">
+                                <div className={`p-1.5 sm:p-2 rounded-full ${isCurrentUser ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'}`}>
+                                  <UserIcon size={16} className="sm:w-5 sm:h-5" />
                                 </div>
                                 <div className="flex flex-col">
-                                  <div className="flex items-center gap-2">
-                                    <span className={`font-medium ${isCurrentUser ? 'text-blue-900 font-bold dark:text-blue-300' : 'text-gray-700 dark:text-gray-200'}`}>
+                                  <div className="flex items-center gap-1 sm:gap-2">
+                                    <span className={`text-sm sm:text-base font-medium ${isCurrentUser ? 'text-blue-900 font-bold dark:text-blue-300' : 'text-gray-700 dark:text-gray-200'} truncate max-w-[100px] sm:max-w-none`}>
                                       {entry.display_name || entry.email.split('@')[0]}
                                     </span>
                                     {entry.is_premium && (
-                                      <span className="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                                        <Crown size={12} fill="currentColor" />
+                                      <span className="inline-flex items-center gap-0.5 sm:gap-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 rounded-full">
+                                        <Crown size={10} className="sm:w-3 sm:h-3" fill="currentColor" />
                                         PRO
                                       </span>
                                     )}
                                     {isCurrentUser && (
-                                      <span className="text-xs bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 px-2 py-0.5 rounded-full font-semibold">YOU</span>
+                                      <span className="text-[10px] sm:text-xs bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 px-1.5 sm:px-2 py-0.5 rounded-full font-semibold">YOU</span>
                                     )}
                                   </div>
                                   {entry.display_name && (
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">{entry.email}</span>
+                                    <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px] sm:max-w-none">{entry.email}</span>
                                   )}
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <span className="font-black text-gray-900 dark:text-gray-100">{entry.total_exp}</span>
-                              <span className="text-xs text-gray-400 dark:text-gray-400 ml-1 font-medium">XP</span>
+                            <td className="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-right">
+                              <span className="text-sm sm:text-base font-black text-gray-900 dark:text-gray-100">{entry.total_exp}</span>
+                              <span className="hidden sm:inline text-xs text-gray-400 dark:text-gray-400 ml-1 font-medium">XP</span>
                             </td>
                           </tr>
                         );

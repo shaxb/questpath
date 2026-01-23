@@ -181,10 +181,11 @@ function DashboardContent() {
             </div>
             <Link
               href="/goals/new"
-              className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
+              className="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-2 sm:px-5 sm:py-2.5 text-sm sm:text-base rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
             >
-              <Plus size={18} />
-              Create Goal
+              <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
+              <span className="hidden xs:inline">Create Goal</span>
+              <span className="xs:hidden">New</span>
             </Link>
           </div>
 
@@ -196,9 +197,9 @@ function DashboardContent() {
                 <p className="text-gray-600 dark:text-gray-300 mb-6">Create your first learning goal to get started!</p>
                 <Link
                   href="/goals/new"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/30 font-medium"
                 >
-                  <Plus size={18} />
+                  <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
                   Create Your First Goal
                 </Link>
               </div>
