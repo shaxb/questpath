@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
         // Keep NextAuth client-side API endpoints local (no proxy)
         { source: '/api/auth/session', destination: '/api/auth/session' },
         { source: '/api/auth/csrf', destination: '/api/auth/csrf' },
+        { source: '/api/auth/signin/:provider*', destination: '/api/auth/signin/:provider*' },
         { source: '/api/auth/signin', destination: '/api/auth/signin' },
         { source: '/api/auth/signout', destination: '/api/auth/signout' },
         { source: '/api/auth/providers', destination: '/api/auth/providers' },

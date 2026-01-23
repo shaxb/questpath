@@ -205,7 +205,7 @@ export default function GoalDetailPage() {
                 
                 {/* Level Node (Square Island) */}
                 <button
-                  onClick={() => !isLocked && setSelectedLevel(level)}
+                  onClick={() => !isLocked && router.push(`/goals/${goal.id}/levels/${level.id}`)}
                   disabled={isLocked}
                   style={{ animationDelay: `${index * 100}ms` }}
                   className={`relative z-10 w-24 h-24 rounded-2xl shadow-lg flex flex-col items-center justify-center transition-all duration-300 animate-slide-up ${

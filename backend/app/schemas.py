@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 from datetime import datetime
 from app.models import GoalStatus, DifficultyLevel, LevelStatus
@@ -42,10 +42,19 @@ class OAuthLoginRequest(BaseModel):
 class CreateGoalRequest(BaseModel):
     description: str = Field(..., min_length=10, max_length=500, description="Your learning goal")
 
+    @field_validator('description')
+    def description_must_not_be_empty(cls, v):
+        if len(v.strip()) > 500:
+            raise ValueError('Description must be at most 500 characters long')
+        if not v.strip():
+            raise ValueError('Description must not be empty or whitespace')
+        return v
+
 
 class TopicResponse(BaseModel):
     """Individual topic within a level"""
     name: str
+    explanation: Optional[str] = None
     completed: bool = False
 
 

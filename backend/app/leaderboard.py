@@ -62,11 +62,18 @@ async def get_leaderboard(
         # cache the leaderboard for 5 minutes
         set_cache("leaderboard", json.dumps(leaderboard), expire=300)
 
-    # calculate current user's rank
+    # calculate current user's rank among all users
+    # Use a subquery to rank all users, then filter for current user
+    rank_subquery = select(
+        User.id,
+        User.email,
+        User.total_exp,
+        func.rank().over(order_by=User.total_exp.desc()).label("rank")
+    ).subquery()
+    
     rank_result = await db.execute(
-        select(func.rank().over(order_by=User.total_exp.desc()).label("rank"),
-            User.id
-        ).where(User.id == current_user.id)
+        select(rank_subquery.c.rank)
+        .where(rank_subquery.c.id == current_user.id)
     )
 
     current_user_rank_row = rank_result.first()

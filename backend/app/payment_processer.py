@@ -19,8 +19,7 @@ router = APIRouter(prefix="/payment", tags=["payment"])
 
 @router.post("/checkout")
 async def create_checkout_session(
-    current_user: Annotated[User, Depends(get_current_user)],
-    db: Annotated[AsyncSession, Depends(get_db)]
+    current_user: Annotated[User, Depends(get_current_user)]
 ):
     """Create a Stripe Checkout Session for premium subscription"""
     try:

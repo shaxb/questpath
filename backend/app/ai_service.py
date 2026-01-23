@@ -50,9 +50,21 @@ Return ONLY valid JSON in this exact structure:
                 "title": "Level title",
                 "description": "What the user will learn in this level",
                 "topics": [
-                    {{"name": "Topic name 1", "completed": false}},
-                    {{"name": "Topic name 2", "completed": false}},
-                    {{"name": "Topic name 3", "completed": false}}
+                    {{
+                        "name": "Topic name 1",
+                        "explanation": "Clear, detailed explanation (4-6 sentences) covering: (1) What this topic is and its core concepts, (2) Why it's important for achieving the goal, (3) A practical real-world example demonstrating the concept, (4) What the learner will be able to do after mastering it. Use simple language and concrete examples to make it easy to understand.",
+                        "completed": false
+                    }},
+                    {{
+                        "name": "Topic name 2",
+                        "explanation": "Clear, detailed explanation (4-6 sentences) with practical examples showing how this concept is used in real projects.",
+                        "completed": false
+                    }},
+                    {{
+                        "name": "Topic name 3",
+                        "explanation": "Clear, detailed explanation (4-6 sentences) with practical examples showing how this concept is used in real projects.",
+                        "completed": false
+                    }}
                 ],
                 "xp_reward": 100
             }}
@@ -60,7 +72,16 @@ Return ONLY valid JSON in this exact structure:
     }}
 }}
 
-Make it practical, actionable, and motivating. NO markdown, NO code blocks, NO explanations, ONLY the JSON object."""
+Make it practical, actionable, and motivating. 
+
+IMPORTANT for explanations:
+- Write in simple, clear language suitable for beginners
+- Include concrete examples (e.g., "like building a login form" or "such as calculating shopping cart totals")
+- Explain WHY the topic matters, not just WHAT it is
+- Show how it applies to real-world projects
+- Each explanation should be 4-6 sentences and educational
+
+NO markdown, NO code blocks, NO extra text outside the JSON, ONLY the JSON object."""
 
     try:
         response = await client.chat.completions.create(
