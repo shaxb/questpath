@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { signIn } from "next-auth/react";
+import { useUser } from '@/contexts/UserContext'
 
 
 export default function RegisterPage() {
   // State for form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { refreshUser } = useUser();
   
   // State for UI feedback
   const [loading, setLoading] = useState(false);
@@ -96,9 +98,12 @@ export default function RegisterPage() {
       // Step 3: Store the token
       localStorage.setItem('token', loginResponse.data.access_token);
       
+      // Refresh user context for new user.
+      await refreshUser();
+
       // Step 4: Redirect to dashboard (user is now logged in!)
       router.push('/dashboard');
-      
+
     } catch (err: any) {
       // Handle errors
       const errorMessage = err.response?.data?.detail || 'Registration failed. Please try again.';
