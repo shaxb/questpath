@@ -13,6 +13,8 @@ import toast from 'react-hot-toast';
 function PricingContent() {
   const { user, loading: userLoading, refreshUser } = useUser();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const searchParams = useSearchParams();
 
   // Check for premium success query param and refresh user data
@@ -39,6 +41,23 @@ function PricingContent() {
       // Error already shown by api toast
       console.error('Failed to start checkout:', err);
       setCheckoutLoading(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    setCancelLoading(true);
+    try {
+      const { data } = await api.post('/payment/cancel-subscription');
+      
+      toast.success(`Subscription cancelled. You'll have access until ${new Date(data.access_until).toLocaleDateString()}`);
+      setShowCancelModal(false);
+      
+      // Refresh user data
+      await refreshUser();
+    } catch (err: any) {
+      console.error('Failed to cancel subscription:', err);
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -74,11 +93,19 @@ function PricingContent() {
           {/* Premium Status Banner */}
           {isPremium && (
             <div className="mb-8 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4">
-              <div className="flex items-center gap-3 justify-center">
-                <Crown className="text-yellow-600 dark:text-yellow-400" size={24} fill="currentColor" />
-                <p className="text-yellow-900 dark:text-yellow-200 font-semibold">
-                  You're currently on the Premium plan!
-                </p>
+              <div className="flex items-center gap-3 justify-between flex-wrap">
+                <div className="flex items-center gap-3">
+                  <Crown className="text-yellow-600 dark:text-yellow-400" size={24} fill="currentColor" />
+                  <p className="text-yellow-900 dark:text-yellow-200 font-semibold">
+                    You're currently on the Premium plan!
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowCancelModal(true)}
+                  className="px-4 py-2 text-sm bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 rounded-lg border border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors font-medium"
+                >
+                  Cancel Subscription
+                </button>
               </div>
             </div>
           )}
@@ -253,6 +280,67 @@ function PricingContent() {
               <div>
                 <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   Is my payment information secure?
+
+        {/* Cancel Confirmation Modal */}
+        {showCancelModal && (
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowCancelModal(false)}
+          >
+            <div 
+              className="bg-white dark:bg-slate-800 rounded-xl max-w-md w-full p-6 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-red-100 dark:bg-red-900/20 rounded-lg">
+                  <Crown className="text-red-600 dark:text-red-400" size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  Cancel Premium Subscription?
+                </h3>
+              </div>
+
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Are you sure you want to cancel your premium subscription? You'll lose access to:
+              </p>
+
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                  <span className="text-red-500">•</span>
+                  <span>Unlimited goals and roadmaps</span>
+                </li>
+                <li className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                  <span className="text-red-500">•</span>
+                  <span>Priority AI processing</span>
+                </li>
+                <li className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                  <span className="text-red-500">•</span>
+                  <span>Advanced analytics and insights</span>
+                </li>
+              </ul>
+
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
+                💡 You'll keep access until the end of your current billing period.
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium"
+                >
+                  Keep Premium
+                </button>
+                <button
+                  onClick={handleCancelSubscription}
+                  disabled={cancelLoading}
+                  className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {cancelLoading ? 'Cancelling...' : 'Yes, Cancel'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
                 </h4>
                 <p className="text-gray-600 dark:text-gray-300">
                   Absolutely! We use Stripe for secure payment processing. We never store your payment information on our servers.

@@ -106,6 +106,91 @@ async def create_checkout_session(
         )
 
 
+@router.post("/cancel-subscription")
+async def cancel_subscription(
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
+    """Cancel user's premium subscription"""
+    try:
+        # Check if user has premium
+        if not current_user.is_premium:
+            raise HTTPException(
+                status_code=400,
+                detail="You don't have an active premium subscription"
+            )
+        
+        # Find the user's subscription in Stripe by email
+        subscriptions = stripe.Subscription.list(
+            limit=10,
+            expand=['data.customer']
+        )
+        
+        user_subscription = None
+        for sub in subscriptions.auto_paging_iter():
+            customer = sub.customer
+            if isinstance(customer, dict):
+                customer_email = customer.get('email')
+            else:
+                customer_email = getattr(customer, 'email', None)
+            
+            if customer_email == current_user.email and sub.status in ['active', 'trialing']:
+                user_subscription = sub
+                break
+        
+        if not user_subscription:
+            logger.warning(
+                "No active subscription found in Stripe for premium user",
+                user_id=current_user.id,
+                email=current_user.email,
+                event="cancel_no_subscription"
+            )
+            raise HTTPException(
+                status_code=404,
+                detail="No active subscription found. Please contact support."
+            )
+        
+        # Cancel the subscription at period end (user keeps access until then)
+        canceled_subscription = stripe.Subscription.modify(
+            user_subscription.id,
+            cancel_at_period_end=True
+        )
+        
+        # Get the cancellation effective date
+        cancel_at = datetime.fromtimestamp(
+            canceled_subscription.current_period_end,
+            tz=timezone.utc
+        )
+        
+        logger.info(
+            "Subscription cancelled",
+            user_id=current_user.id,
+            subscription_id=user_subscription.id,
+            cancel_at=cancel_at.isoformat(),
+            event="subscription_cancelled"
+        )
+        
+        return {
+            "message": "Subscription cancelled successfully",
+            "access_until": cancel_at.isoformat(),
+            "subscription_id": user_subscription.id
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            "Failed to cancel subscription",
+            error=str(e),
+            user_id=current_user.id,
+            event="cancel_error"
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to cancel subscription. Please try again or contact support."
+        )
+
+
 @router.post("/webhook")
 async def stripe_webhook(
     request: Request,
