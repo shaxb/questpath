@@ -157,10 +157,25 @@ async def cancel_subscription(
         )
         
         # Get the cancellation effective date
-        cancel_at = datetime.fromtimestamp(
-            canceled_subscription.current_period_end,
-            tz=timezone.utc
-        )
+        # Handle both dict and object access patterns
+        if hasattr(canceled_subscription, 'current_period_end'):
+            period_end = canceled_subscription.current_period_end
+        elif isinstance(canceled_subscription, dict):
+            period_end = canceled_subscription.get('current_period_end')
+        else:
+            period_end = None
+        
+        if period_end:
+            cancel_at = datetime.fromtimestamp(period_end, tz=timezone.utc)
+        else:
+            # Fallback if no period end found
+            cancel_at = datetime.now(timezone.utc) + timedelta(days=30)
+            logger.warning(
+                "No period_end in cancelled subscription, using 30-day fallback",
+                user_id=current_user.id,
+                subscription_id=user_subscription.id,
+                event="cancel_no_period_end"
+            )
         
         logger.info(
             "Subscription cancelled",
