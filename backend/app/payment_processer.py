@@ -120,35 +120,45 @@ async def cancel_subscription(
                 detail="You don't have an active premium subscription"
             )
         
-        # Find the user's subscription in Stripe by email
+        # First, find the customer by email
+        customers = stripe.Customer.list(email=current_user.email, limit=1)
+        
+        if not customers.data:
+            logger.warning(
+                "No Stripe customer found for user",
+                user_id=current_user.id,
+                email=current_user.email,
+                event="cancel_no_customer"
+            )
+            raise HTTPException(
+                status_code=404,
+                detail="No payment customer found. Please contact support."
+            )
+        
+        customer = customers.data[0]
+        
+        # Find active subscriptions for this customer
         subscriptions = stripe.Subscription.list(
-            limit=10,
-            expand=['data.customer']
+            customer=customer.id,
+            status='active',
+            limit=10
         )
         
-        user_subscription = None
-        for sub in subscriptions.auto_paging_iter():
-            customer = sub.customer
-            if isinstance(customer, dict):
-                customer_email = customer.get('email')
-            else:
-                customer_email = getattr(customer, 'email', None)
-            
-            if customer_email == current_user.email and sub.status in ['active', 'trialing']:
-                user_subscription = sub
-                break
-        
-        if not user_subscription:
+        if not subscriptions.data:
             logger.warning(
                 "No active subscription found in Stripe for premium user",
                 user_id=current_user.id,
                 email=current_user.email,
+                customer_id=customer.id,
                 event="cancel_no_subscription"
             )
             raise HTTPException(
                 status_code=404,
-                detail="No active subscription found. Please contact support."
+                detail="No active subscription found. It may have already been cancelled."
             )
+        
+        # Get the first active subscription
+        user_subscription = subscriptions.data[0]
         
         # Cancel the subscription at period end (user keeps access until then)
         canceled_subscription = stripe.Subscription.modify(
