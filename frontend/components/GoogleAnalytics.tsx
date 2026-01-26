@@ -3,8 +3,9 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { pageview } from '@/lib/analytics';
+import { Suspense } from 'react';
 
-export default function GoogleAnalytics() {
+function GoogleAnalyticsInner() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -14,5 +15,13 @@ export default function GoogleAnalytics() {
     pageview(url);
   }, [pathname, searchParams]);
 
-  return null; // This component doesn't render anything
+  return null;
+}
+
+export default function GoogleAnalytics() {
+  return (
+    <Suspense fallback={null}>
+      <GoogleAnalyticsInner />
+    </Suspense>
+  );
 }
