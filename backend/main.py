@@ -70,6 +70,7 @@ from app.health import router as health_router
 from app.progression import router as progression_router
 from app.leaderboard import router as leaderboard_router
 from app.payment_processer import router as payment_router
+from app.admin import router as admin_router
 
 
 app.include_router(users_router)
@@ -79,6 +80,7 @@ app.include_router(progression_router)
 app.include_router(leaderboard_router)
 app.include_router(health_router)  # Health check endpoints
 app.include_router(payment_router)
+app.include_router(admin_router)  # Admin stats and events
 
 
 @app.get("/")

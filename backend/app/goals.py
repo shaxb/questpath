@@ -14,6 +14,7 @@ from .ai_service import generate_roadmap
 from .rate_limiter import check_rate_limit
 from .logger import logger
 from .metrics import metrics
+from .events import log_event
 
 router = APIRouter(prefix="/goals", tags=["goals"])
 
@@ -169,6 +170,9 @@ async def create_goal(
         
         # Track business metric
         metrics.increment_business_metric("goals_created")
+
+        # Log event
+        await log_event(db, "goal_created", user_id=current_user.id, data={"goal_id": goal.id, "title": goal.title, "is_premium": has_premium})
         
         logger.info(
             "Goal created successfully",
@@ -296,6 +300,15 @@ async def mark_topic(
     
     level.topics[topic_index]["completed"] = not level.topics[topic_index]["completed"]
     flag_modified(level, "topics")  # Tell SQLAlchemy that topics changed
+    
+    # Log event if topic was just marked complete (not uncomplete)
+    if level.topics[topic_index]["completed"]:
+        await log_event(db, "topic_completed", user_id=current_user.id, data={
+            "level_id": level.id,
+            "level_title": level.title,
+            "topic_index": topic_index,
+            "topic_title": level.topics[topic_index].get("title", "")
+        })
     
     await db.commit()
     return {"detail": "Topic marked as completed"}

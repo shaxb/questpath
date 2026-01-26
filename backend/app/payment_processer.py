@@ -10,6 +10,7 @@ from app.config import settings
 from app.auth import get_current_user
 from app.logger import logger
 from app.db import get_db
+from app.events import log_event
 
 
 stripe.api_key = settings.stripe_api_key
@@ -391,6 +392,14 @@ async def handle_checkout_completed(session, db: AsyncSession):
         db.add(user)
         await db.commit()
         
+        # Log event
+        await log_event(
+            db, 
+            "premium_purchased", 
+            user_id=user.id,
+            data={"subscription_id": subscription_id, "expiry": premium_expiry.isoformat()}
+        )
+        
         logger.info(
             "Premium subscription activated",
             user_id=user.id,
@@ -448,6 +457,14 @@ async def handle_payment_succeeded(invoice, db: AsyncSession):
                     user.premium_expiry = premium_expiry
                     db.add(user)
                     await db.commit()
+                    
+                    # Log event
+                    await log_event(
+                        db,
+                        "premium_renewed",
+                        user_id=user.id,
+                        data={"subscription_id": subscription_id, "expiry": premium_expiry.isoformat()}
+                    )
                     
                     logger.info(
                         "Premium subscription renewed",
@@ -522,6 +539,14 @@ async def handle_subscription_deleted(subscription, db: AsyncSession):
         user.premium_expiry = datetime.now(timezone.utc)
         db.add(user)
         await db.commit()
+        
+        # Log event
+        await log_event(
+            db,
+            "premium_cancelled",
+            user_id=user.id,
+            data={"customer_id": customer_id}
+        )
         
         logger.info(
             "Premium subscription cancelled",

@@ -27,6 +27,19 @@ class LevelStatus(enum.Enum):
 
 
 # Models
+class Event(Base):
+    __tablename__ = "events"
+    
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    event_type: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), index=True)
+    
+    # Relationship
+    user: Mapped["User"] = relationship("User", backref="events")
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -47,6 +60,7 @@ class User(Base):
     # featues
     is_premium: Mapped[bool] = mapped_column(default=False, index=True)
     premium_expiry: Mapped[DateTime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    is_admin: Mapped[bool] = mapped_column(default=False, index=True)
 
     # Relationship (NOT a database column)
     goals: Mapped[list["Goal"]] = relationship("Goal", back_populates="user")

@@ -16,6 +16,7 @@ class UserResponse(BaseModel):
     total_exp: int
     is_premium: bool = False
     premium_expiry: Optional[datetime] = None
+    is_admin: bool = False
     
     class Config:
         from_attributes = True

@@ -16,6 +16,7 @@ from .cache import delete_cache
 from .logger import logger
 from app.rate_limiter import check_rate_limit
 from .metrics import metrics
+from .events import log_event
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -48,6 +49,9 @@ async def register(
 
     # Track business metric
     metrics.increment_business_metric("users_registered")
+
+    # Log event
+    await log_event(db, "user_registered", user_id=new_user.id, data={"email": new_user.email})
 
     # delete leaderboard cache as new user is added
     delete_cache("leaderboard")
@@ -89,6 +93,9 @@ async def login(
     # add refresh token hash to db
     user.refresh_token_hash = hash_refresh_token(refresh_token)
     await db.commit()
+
+    # event logging
+    await log_event(db, "user_logged_in", user_id=user.id, data={"email": user.email})
     
     return TokenResponse(access_token=access_token)
 
@@ -196,6 +203,12 @@ async def oauth_login(
         db.add(user)
         await db.commit()
         await db.refresh(user)
+        
+        # Log new OAuth user registration
+        await log_event(db, "user_registered_oauth", user_id=user.id, data={
+            "email": user.email,
+            "provider": "google"
+        })
     else:
         # Update existing user's OAuth info if needed
         if not user.google_id:
@@ -204,7 +217,13 @@ async def oauth_login(
             user.display_name = oauth_req.display_name
         if oauth_req.profile_picture:
             user.profile_picture = oauth_req.profile_picture
-        await db.commit()    
+        await db.commit()
+        
+        # Log OAuth login
+        await log_event(db, "user_logged_in_oauth", user_id=user.id, data={
+            "email": user.email,
+            "provider": "google"
+        })    
     # Create access token
     access_token = create_access_token(data={"sub": str(user.id)})
     

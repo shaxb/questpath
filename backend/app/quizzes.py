@@ -15,6 +15,7 @@ from app.cache import delete_cache
 from app.rate_limiter import check_rate_limit
 from .logger import logger
 from .metrics import metrics
+from .events import log_event
 
 router = APIRouter(prefix="/levels", tags=["levels"])
 
@@ -61,6 +62,9 @@ async def get_level_quiz(
             "time_limit": 300,  # 5 minutes # depricated, handled on frontend
             "questions": quiz_data["questions"]
         }
+
+        # Log event
+        await log_event(db, "quiz_generated", user_id=current_user.id, data={"level_id": level.id, "level_title": level.title})
         
         return response
     except Exception as e:
@@ -143,6 +147,14 @@ async def submit_level_quiz(
         
         # Track business metric
         metrics.increment_business_metric("quizzes_completed")
+
+        # Log event
+        await log_event(db, "quiz_completed", user_id=current_user.id, data={
+            "level_id": level.id,
+            "level_title": level.title,
+            "xp_earned": xp_earned,
+            "next_level_unlocked": next_level_unlocked
+        })
 
         await db.commit()
     else:

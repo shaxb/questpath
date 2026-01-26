@@ -87,3 +87,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db:Ann
         logger.error("User not found for given token", user_id=id, event="user_not_found")
         raise HTTPException(status_code=401, detail="Could not validate credentials")
     return user
+
+
+
+async def get_admin_user(current_user: Annotated[User, Depends(get_current_user)]) -> User:
+    if not current_user.is_admin:
+        logger.warning("Unauthorized admin access attempt", user_id=current_user.id, event="admin_access_denied")
+        raise HTTPException(status_code=403, detail="Admin privileges required")
+    return current_user
