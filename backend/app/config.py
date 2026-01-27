@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     # cors
     frontend_url: str | None = None
 
+    # google analytics
+    next_public_ga_measurement_id: str | None = None
+
 
     model_config = SettingsConfigDict(env_file=".env.local", env_file_encoding="utf-8")
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BarChart3, Users, Target, Zap, TrendingUp } from 'lucide-react';
+import { BarChart3, Users, Target, Zap, TrendingUp, Filter, X } from 'lucide-react';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import Navbar from '@/components/Navbar';
 import Loading from '@/components/ui/Loading';
@@ -48,10 +48,34 @@ interface AdminStats {
   }>;
 }
 
+interface EventsResponse {
+  filters: {
+    event_type: string | null;
+    user_id: number | null;
+    hours: number;
+  };
+  count: number;
+  events: Array<{
+    id: number;
+    type: string;
+    user_id: number | null;
+    data: any;
+    created_at: string;
+  }>;
+}
+
 export default function AdminPage() {
   const [stats, setStats] = useState<AdminStats | null>(null);
+  const [events, setEvents] = useState<EventsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // Filter states
+  const [eventTypeFilter, setEventTypeFilter] = useState('');
+  const [userIdFilter, setUserIdFilter] = useState('');
+  const [hoursFilter, setHoursFilter] = useState(24);
+  const [limitFilter, setLimitFilter] = useState(100);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -67,6 +91,29 @@ export default function AdminPage() {
 
     fetchStats();
   }, []);
+  
+  // Fetch events with filters
+  const fetchEvents = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (eventTypeFilter) params.append('event_type', eventTypeFilter);
+      if (userIdFilter) params.append('user_id', userIdFilter);
+      params.append('hours', hoursFilter.toString());
+      params.append('limit', limitFilter.toString());
+      
+      const response = await api.get(`/admin/events?${params.toString()}`);
+      setEvents(response.data);
+    } catch (err: any) {
+      console.error('Failed to load events:', err);
+    }
+  };
+  
+  const clearFilters = () => {
+    setEventTypeFilter('');
+    setUserIdFilter('');
+    setHoursFilter(24);
+    setLimitFilter(100);
+  };
 
   if (loading) {
     return (
@@ -257,11 +304,114 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Recent Events */}
+          {/* Recent Events with Filters */}
           <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              Recent Events (Last 20)
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                Events Log
+              </h2>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+              >
+                <Filter size={18} />
+                {showFilters ? 'Hide Filters' : 'Show Filters'}
+              </button>
+            </div>
+
+            {/* Filter Panel */}
+            {showFilters && (
+              <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Event Type
+                    </label>
+                    <select
+                      value={eventTypeFilter}
+                      onChange={(e) => setEventTypeFilter(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Events</option>
+                      <option value="user_registered">User Registered</option>
+                      <option value="user_registered_oauth">User Registered (OAuth)</option>
+                      <option value="user_logged_in">User Logged In</option>
+                      <option value="user_logged_in_oauth">User Logged In (OAuth)</option>
+                      <option value="goal_created">Goal Created</option>
+                      <option value="topic_completed">Topic Completed</option>
+                      <option value="quiz_generated">Quiz Generated</option>
+                      <option value="quiz_completed">Quiz Completed</option>
+                      <option value="premium_purchased">Premium Purchased</option>
+                      <option value="premium_renewed">Premium Renewed</option>
+                      <option value="premium_cancelled">Premium Cancelled</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      User ID
+                    </label>
+                    <input
+                      type="number"
+                      value={userIdFilter}
+                      onChange={(e) => setUserIdFilter(e.target.value)}
+                      placeholder="Filter by user ID"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Time Range (hours)
+                    </label>
+                    <select
+                      value={hoursFilter}
+                      onChange={(e) => setHoursFilter(Number(e.target.value))}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value={1}>Last Hour</option>
+                      <option value={24}>Last 24 Hours</option>
+                      <option value={168}>Last Week</option>
+                      <option value={720}>Last Month</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Limit
+                    </label>
+                    <select
+                      value={limitFilter}
+                      onChange={(e) => setLimitFilter(Number(e.target.value))}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                      <option value={200}>200</option>
+                      <option value={500}>500</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2 mt-4">
+                  <button
+                    onClick={fetchEvents}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+                  >
+                    Apply Filters
+                  </button>
+                  <button
+                    onClick={clearFilters}
+                    className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                  >
+                    <X size={16} />
+                    Clear
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Events Display */}
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -273,13 +423,13 @@ export default function AdminPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {stats.events_today.recent.map((event) => (
+                  {(events?.events || stats.events_today.recent).map((event) => (
                     <tr
                       key={event.id}
                       className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900"
                     >
                       <td className="p-3 text-sm text-gray-600 dark:text-gray-300">
-                        {new Date(event.created_at).toLocaleTimeString()}
+                        {new Date(event.created_at).toLocaleString()}
                       </td>
                       <td className="p-3 text-sm">
                         <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded text-xs font-medium">
@@ -300,6 +450,15 @@ export default function AdminPage() {
                   ))}
                 </tbody>
               </table>
+              
+              {events && (
+                <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                  Showing {events.count} events
+                  {events.filters.event_type && ` • Type: ${events.filters.event_type}`}
+                  {events.filters.user_id && ` • User ID: ${events.filters.user_id}`}
+                  {` • Last ${events.filters.hours} hours`}
+                </div>
+              )}
             </div>
           </div>
         </main>
