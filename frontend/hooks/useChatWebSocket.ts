@@ -44,9 +44,12 @@ export function useChatWebSocket(): UseChatWebSocketReturn {
 
     // Determine WebSocket URL
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    // WebSocket connects directly to backend (bypasses Next.js proxy)
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const host = backendUrl.replace(/^https?:\/\//, '');
+    // Use current domain (works for both dev and production)
+    // Dev: ws://localhost:3000 → ws://localhost:8000 (direct to backend)
+    // Prod: wss://questpath.live → wss://questpath.live (nginx routes /ws/chat to backend)
+    const host = process.env.NODE_ENV === 'development' 
+      ? 'localhost:8000'  // Dev: direct to backend
+      : window.location.host;  // Prod: same domain, nginx routes to backend
     const wsUrl = `${protocol}//${host}/ws/chat?token=${token}`;
 
     try {
