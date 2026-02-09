@@ -8,6 +8,7 @@ import Navbar from '@/components/Navbar';
 import Loading from '@/components/ui/Loading';
 import ErrorDisplay from '@/components/ui/ErrorDisplay';
 import { useUser } from '@/contexts/UserContext';
+import { GlobalChat } from '@/components/chat/GlobalChat';
 
 interface LeaderboardEntry {
   rank: number;
@@ -188,6 +189,9 @@ export default function LeaderboardPage() {
             </div>
           )}
         </main>
+        
+        {/* Global Chat */}
+        <GlobalChat />
       </div>
     </ProtectedRoute>
   );
