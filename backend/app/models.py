@@ -40,6 +40,19 @@ class Event(Base):
     user: Mapped["User"] = relationship("User", backref="events")
 
 
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+    
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    message: Mapped[str] = mapped_column(String(500), nullable=False)
+    is_deleted: Mapped[bool] = mapped_column(default=False)
+    created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), index=True)
+    
+    # Relationship
+    user: Mapped["User"] = relationship("User", backref="chat_messages")
+
+
 class User(Base):
     __tablename__ = "users"
 

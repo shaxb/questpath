@@ -179,6 +179,34 @@ class StatsResponse(BaseModel):
     goal_completion_percentage: int
 
 
+# chat schemas
+
+class ChatMessageCreate(BaseModel):
+    message: str
+    
+    @field_validator('message')
+    @classmethod
+    def validate_message(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError('Message cannot be empty')
+        if len(v) > 500:
+            raise ValueError('Message too long (max 500 characters)')
+        return v
+
+
+class ChatMessageResponse(BaseModel):
+    id: int
+    user_id: int
+    user_display_name: str
+    user_is_premium: bool
+    message: str
+    created_at: datetime
+    
+    model_config = {"from_attributes": True}
+
+
+
 
 
 

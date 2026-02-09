@@ -19,6 +19,7 @@ from .events import log_event
 router = APIRouter(prefix="/goals", tags=["goals"])
 
 
+
 def is_user_premium(user: User) -> bool:
     """
     Check if user has active premium subscription.
